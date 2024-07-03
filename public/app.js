@@ -4,12 +4,12 @@ const bcrypt = require('bcrypt');
 const path = require("path");
 const bodyParser = require('body-parser');
 const users = require('./data').userDB;
-
+  
 const app = express();
 const server = http.createServer(app);
 
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(express.static(path.join(__dirname,'./public')));
+app.use(express.static(path.join(__dirname,'./')));
 
 
 app.get('/',(req,res) => {
@@ -17,7 +17,7 @@ app.get('/',(req,res) => {
 });
 
 
-app.post('/public/register', async (req, res) => {
+app.post('/register', async (req, res) => {
     try{
         let foundUser = users.find((data) => req.body.email === data.email);
         if (!foundUser) {
@@ -33,7 +33,7 @@ app.post('/public/register', async (req, res) => {
             users.push(newUser);
             console.log('User list', users);
     
-            res.send("<div align ='center'><h2>Registration successful</h2></div><br><br><div align='center'><a href='./public/login.html'>login</a></div><br><br><div align='center'><a href='./public/registration.html'>Register another user</a></div>");
+            res.send("<div align ='center'><h2>Registration successful</h2></div><br><br><div align='center'><a href='./login.html'>login</a></div><br><br><div align='center'><a href='./registration.html'>Register another user</a></div>");
         } else {
             res.send("<div align ='center'><h2>Email already used</h2></div><br><br><div align='center'><a href='./registration.html'>Register again</a></div>");
         }
@@ -42,7 +42,7 @@ app.post('/public/register', async (req, res) => {
     }
 });
 
-app.post('/public/login', async (req, res) => {
+app.post('/login', async (req, res) => {
     try{
         let foundUser = users.find((data) => req.body.email === data.email);
         if (foundUser) {
@@ -53,9 +53,9 @@ app.post('/public/login', async (req, res) => {
             const passwordMatch = await bcrypt.compare(submittedPass, storedPass);
             if (passwordMatch) {
                 let usrname = foundUser.username;
-                res.send(`<div align ='center'><h2>login successful</h2></div><br><br><br><div align ='center'><h3>Hello ${usrname}</h3></div><br><br><div align='center'><a href='./public/login.html'>logout</a></div>`);
+                res.send(`<div align ='center'><h2>login successful</h2></div><br><br><br><div align ='center'><h3>Hello ${usrname}</h3></div><br><br><div align='center'><a href='./login.html'>logout</a></div>`);
             } else {
-                res.send("<div align ='center'><h2>Invalid email or password</h2></div><br><br><div align ='center'><a href='./public/login.html'>login again</a></div>");
+                res.send("<div align ='center'><h2>Invalid email or password</h2></div><br><br><div align ='center'><a href='./login.html'>login again</a></div>");
             }
         }
         else {
@@ -63,7 +63,7 @@ app.post('/public/login', async (req, res) => {
             let fakePass = `$2b$$10$ifgfgfgfgfgfgfggfgfgfggggfgfgfga`;
             await bcrypt.compare(req.body.password, fakePass);
     
-            res.send("<div align ='center'><h2>Invalid email or password</h2></div><br><br><div align='center'><a href='./public/login.html'>login again<a><div>");
+            res.send("<div align ='center'><h2>Invalid email or password</h2></div><br><br><div align='center'><a href='./login.html'>login again<a><div>");
         }
     } catch{
         res.send("Internal server error");
