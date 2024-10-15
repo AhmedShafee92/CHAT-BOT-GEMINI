@@ -1,31 +1,46 @@
+// Here is the google gemeni library (importing the API )
 import { GoogleGenerativeAI } from "@google/generative-ai";
+// the md style library (for desgin instead create our css file )
 import md from "markdown-it";
 
 // initialize the model 
+// Here we access the google gemeni API using our API_KEY to access the server  
 const genAI = new GoogleGenerativeAI(`${import.meta.env.VITE_API_KEY}`);
+// Here we choose which model of the gemeni will use in this case we'r using the "gemini-pro"
 const model = genAI.getGenerativeModel({model:"gemini-pro"});
+// create var response which will content the reponse from the gemini 
 const response = " ";
-
+// history array which will help the gemini API to analyse the data in the best way .
 let  history = [];
 
+// This function got the user input as "prompt " and return the response from the gemini API (return string as answer)
+// we can add this as inline script inside the html file 
 async function getResponse(prompt)
 { 
+  // create an empty response var 
   var response =  " ";
+  // create an assest var which will help us to return the response 
   var chat = " ";
+  // create an assest var which will help us to return the response 
   var result = " ";
   try 
   {
-      chat = await model.startChat({history:history});   
+   //Here we ansert to "chat" the history . 
+    chat = await model.startChat({history:history});   
   } catch (error) 
   {
+    // if we failed to get response from the google gemini API then chat will return error access to the API server 
     chat = "Error equre when tring to access the history ";
   }
   // const message = await model.generateContent(prompt);
   try 
   {
-     result = await chat.sendMessage(prompt);
+    // Here we try to use the sendMessage (but the sendMessage not exist which not correct way )
+    // there's no declartion for the sendMessage function in the main.js
+    result = await chat.sendMessage(prompt);
   } catch (error) 
   {
+    // return error if the sendMessage function failed 
     result = "Error aqure when ting to send the message ";
   }
   try
@@ -34,29 +49,50 @@ async function getResponse(prompt)
   }
   catch(error)
   {
-    response = "Can't give an answer from the server, please ask again or change your question ";
+    response = "Can't give an answer from the server, please ask again or change your question";
   }
 
+  // convert the response of the gemini API to string and insert inside the text
   const text = response.text();
   console.log(text);
   return text;
 }
 
+/* 
+  This function is handling the responce from the google gemini API 
+  and put the reponse inside an html page 
 
+  Note : mabye we don't need this function 
+*/
 async function handleSubmit(event)
 {
+    // there's no declartion for the preventDefault function in the main.js
     event.preventDefault();
+    // create var userMessage to control the prompt in the (chat-page.html file)
     let userMessage = document.getElementById("prompt");
+    // create chatArea var to control tthe chat-conainer (chat-page.html file)
     const chatArea = document.getElementById("chat-container"); 
+    /* here we check if the user message (input ) is not empty 
+      if the user message is empty then we return null string 
+    */
     var prompt = userMessage.value.trim(); 
     if (prompt ===  '')
     {
       return;
     }
+    // Here we show the user message on the in the html 
+    // Note here we mabye wil delete this , becusae we just need the responce as string without control the html web 
     console.log("user message ",prompt);
+    // THE same here we try to insert the user inout inside the html web page 
     chatArea.innerHTML += userDiv(prompt);
+    // add the end of the user input 
     userMessage.value = "";
+
+    // here what we need the response of the server API from  the google gemini . 
+    // we create aiResponse that get the response from the getResponse function 
     const aiResponse = await getResponse(prompt);
+    // Here also try to adding the responce to the html page 
+    // Note we don't need all this 
     let md_text = md().render(aiResponse);
     chatArea.innerHTML += aiDiv(md_text);
 
@@ -77,6 +113,11 @@ async function handleSubmit(event)
     */
 }
 
+
+/* 
+  Here we can see the two Div that will help the handleResponse function 
+  Note : in this stage we don't use the handleResponse function, then this two div will not use 
+*/
 // User Chat 
 export const userDiv = (data) => {
   return `
@@ -100,9 +141,11 @@ return ` <div class="flex gab-2 justify-end">
 
 };
 
+// Note : these also will help the handleResponse function which mabye will delete 
 const chatForm = document.getElementById("chat-form");
 chatForm.addEventListener("submit",handleSubmit);
 
 chatForm.addEventListener("keyup",(event) =>{
   if(event.keyCode === 13) handleSubmit(event);
 });
+
