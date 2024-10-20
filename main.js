@@ -70,10 +70,14 @@ async function handleSubmit(event)
     event.preventDefault();
     // create var userMessage to control the prompt in the (chat-page.html file)
     let userMessage = document.getElementById("prompt");
+    // image space 
+    const image = document.getElementById("image");
+    
     // create chatArea var to control tthe chat-conainer (chat-page.html file)
     const chatArea = document.getElementById("chat-container"); 
-    /* here we check if the user message (input ) is not empty 
-      if the user message is empty then we return null string 
+    /* 
+      here we check if the user message (input ) is not empty 
+      if the user message is empty then we return null string  
     */
     var prompt = userMessage.value.trim(); 
     if (prompt ===  '')
