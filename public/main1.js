@@ -41,7 +41,7 @@ async function analyzeImage(imageUrl, prompt) {
   }
 }
 
-// Usage example:
+// The location of the image 
 const imageUrl = "/user.png";
 const prompt = "Describe the image in detail.";
 const result = await analyzeImage(imageUrl, prompt);

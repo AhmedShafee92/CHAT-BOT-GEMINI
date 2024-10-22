@@ -71,27 +71,38 @@ async function handleSubmit(event)
     // create var userMessage to control the prompt in the (chat-page.html file)
     let userMessage = document.getElementById("prompt");
     // image space 
-    const image = document.getElementById("image");
+    const imageInput = document.getElementById("image");
     
     // create chatArea var to control tthe chat-conainer (chat-page.html file)
     const chatArea = document.getElementById("chat-container"); 
     /* 
-      here we check if the user message (input ) is not empty 
+      Here we check if the user message (input ) is not empty 
       if the user message is empty then we return null string  
     */
     var prompt = userMessage.value.trim(); 
-    if (prompt ===  '')
+
+    function checkImageInput() {
+      if (imageInput.files.length === 0) {
+        // No image selected
+        return 0;
+        // Add error message or prevent form submission
+      } else {
+        // Image selected
+        return 1;
+        // Proceed with image processing
+      }
+    }
+    // if the text and image is empty 
+    if (prompt ===  '' && checkImageInput() === 0)
     {
       return;
-    }
-    // Here we show the user message on the in the html 
-    // Note here we mabye wil delete this , becusae we just need the responce as string without control the html web 
-    console.log("user message ",prompt);
-    // THE same here we try to insert the user inout inside the html web page 
-    chatArea.innerHTML += userDiv(prompt);
-    // add the end of the user input 
-    userMessage.value = "";
-
+    }else if(prompt !==  '')
+    {
+      // Here we show the user message on the in the html 
+      // Note here we mabye wil delete this , becusae we just need the responce as string without control the html web 
+      console.log("user message ",prompt);
+      // THE same here we try to insert the user inout inside the html web page 
+      chatArea.innerHTML += userDiv(prompt);
     // here what we need the response of the server API from  the google gemini . 
     // we create aiResponse that get the response from the getResponse function 
     const aiResponse = await getResponse(prompt);
@@ -99,6 +110,27 @@ async function handleSubmit(event)
     // Note we don't need all this 
     let md_text = md().render(aiResponse);
     chatArea.innerHTML += aiDiv(md_text);
+      // add the end of the user input 
+      userMessage.value = "";
+    }else if(checkImageInput())
+    { 
+        const messageDiv = document.createElement('div');
+        // add the type of the side converstion     
+        messageDiv.classList.add('chat-message', 'user');
+        
+       // create img var that can be like (image element in the web page ) 
+        const img = document.createElement('img');
+        // insert the image input from the user to the img var  
+        img.src = imageInput;
+        // add to the var image "chat-image " string  
+        img.classList.add('chat-image');
+        // insert the img var to the messageDiv 
+        messageDiv.appendChild(img);
+        chatArea.innerHTML += messageDiv;
+       
+       // should find an option to disapper the image  imageInput = "";
+
+      } 
 
     /*
     let newUserRole = {
