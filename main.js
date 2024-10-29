@@ -13,6 +13,13 @@ const response = " ";
 // history array which will help the gemini API to analyse the data in the best way .
 let  history = [];
 
+// create chatArea var to control tthe chat-conainer (chat-page.html file)
+const chatArea = document.getElementById("chat-container"); 
+// create var userMessage to control the prompt in the (chat-page.html file)
+let userMessage = document.getElementById("prompt");
+// image space 
+const imageInput = document.getElementById("image");
+
 // This function got the user input as "prompt " and return the response from the gemini API (return string as answer)
 // we can add this as inline script inside the html file 
 async function getResponse(prompt)
@@ -25,7 +32,7 @@ async function getResponse(prompt)
   var result = " ";
   try 
   {
-   //Here we ansert to "chat" the history . 
+    //Here we ansert to "chat" the history . 
     chat = await model.startChat({history:history});   
   } catch (error) 
   {
@@ -68,13 +75,6 @@ async function handleSubmit(event)
 {
     // there's no declartion for the preventDefault function in the main.js
     event.preventDefault();
-    // create var userMessage to control the prompt in the (chat-page.html file)
-    let userMessage = document.getElementById("prompt");
-    // image space 
-    const imageInput = document.getElementById("image");
-    
-    // create chatArea var to control tthe chat-conainer (chat-page.html file)
-    const chatArea = document.getElementById("chat-container"); 
     /* 
       Here we check if the user message (input ) is not empty 
       if the user message is empty then we return null string  
@@ -110,7 +110,7 @@ async function handleSubmit(event)
     // Note we don't need all this 
     let md_text = md().render(aiResponse);
     chatArea.innerHTML += aiDiv(md_text);
-      // add the end of the user input 
+    // add the end of the user input 
       userMessage.value = "";
     }else if(checkImageInput())
     { 
@@ -121,14 +121,14 @@ async function handleSubmit(event)
        // create img var that can be like (image element in the web page ) 
         const img = document.createElement('img');
         // insert the image input from the user to the img var  
-        img.src = imageInput;
+        img.src = imageInput.files[0];
         // add to the var image "chat-image " string  
         img.classList.add('chat-image');
         // insert the img var to the messageDiv 
         messageDiv.appendChild(img);
-        chatArea.innerHTML += messageDiv;
-       
-       // should find an option to disapper the image  imageInput = "";
+        chatArea.appendChild(img);
+       // should find an option to disapper the image : imageInput = "";
+       imageInput.value = ''; // Clear file input after sending
 
       } 
 
@@ -154,6 +154,7 @@ async function handleSubmit(event)
   Here we can see the two Div that will help the handleResponse function 
   Note : in this stage we don't use the handleResponse function, then this two div will not use 
 */
+
 // User Chat 
 export const userDiv = (data) => {
   return `

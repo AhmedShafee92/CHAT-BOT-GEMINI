@@ -1,5 +1,3 @@
-    
-
         // Here we create four web element that will control the web page (access byId)
         // chatBox var (this's a Div web element )
         const chatBox = document.getElementById('chat-box');
