@@ -32,11 +32,10 @@ async function getResponse(prompt)
   var result = " ";
   try 
   {
-    //Here we ansert to "chat" the history . 
-    chat = await model.startChat({history:history});   
+    chat = await model.startChat({history:history});  
   } catch (error) 
   {
-    // if we failed to get response from the google gemini API then chat will return error access to the API server 
+    // esle if we failed to get response from the gemini API 
     chat = "Error equre when tring to access the history ";
   }
   // const message = await model.generateContent(prompt);

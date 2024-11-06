@@ -1,11 +1,11 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
-
 // Replace 'YOUR_API_KEY' with your actual API key
-const genAI = new GoogleGenerativeAI('AIzaSyB3QzKMg6ZQEW5X6NS_FzcpTAJ400yi_kc');
+const genAI = new GoogleGenerativeAI(`${import.meta.env.VITE_API_KEY}`);
 const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
 // Function to analyze an image
-async function analyzeImage(imageData) {
+async function analyzeImage(imageData) 
+{
     const image = {
         inlineData: {
             data: imageData,
@@ -19,7 +19,7 @@ async function analyzeImage(imageData) {
 }
 
 // Example usage:
-const imageData = fs.readFileSync('image.jpg', 'base64');
+const imageData = fs.readFileSync('user.png', 'base64');
 analyzeImage(imageData)
     .then(result => {
         console.log(result); // Output the analysis result
