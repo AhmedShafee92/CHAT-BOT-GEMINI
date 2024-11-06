@@ -1,8 +1,10 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
-// Replace 'YOUR_API_KEY' with your actual API key
-const genAI = new GoogleGenerativeAI(`${import.meta.env.VITE_API_KEY}`);
-const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import fs from 'fs';
 
+// Replace 'YOUR_API_KEY' with your actual API key
+const genAI = new GoogleGenerativeAI(`AIzaSyB3QzKMg6ZQEW5X6NS_FzcpTAJ400yi_kc`);
+const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+const imageUrl = 'C:/Users/shafe/Downloads/man-user-color-icon.png';
 // Function to analyze an image
 async function analyzeImage(imageData) 
 {
@@ -19,7 +21,7 @@ async function analyzeImage(imageData)
 }
 
 // Example usage:
-const imageData = fs.readFileSync('user.png', 'base64');
+const imageData = fs.readFileSync(imageUrl, 'base64');
 analyzeImage(imageData)
     .then(result => {
         console.log(result); // Output the analysis result
